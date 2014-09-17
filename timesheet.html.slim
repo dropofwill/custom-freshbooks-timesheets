@@ -27,6 +27,12 @@ html
         margin-bottom: 3em;
       }
 
+      .full {
+        clear: both;
+        width: 100%;
+        padding-top: 1in;
+      }
+
       .right {
         float: left;
         width: 50%;
@@ -99,4 +105,27 @@ html
             td Total Hours: 
             td 20.75 hours
 
+      section.full
+        /p #{entries}
+        table
+          tr.thead
+            td Task
+            td Project
+            td Date
+            td Rate
+            td Hours
+
+          - entries.each do |a|
+            tr
+              td #{a["task"]}
+              td #{a["project"]}
+              td #{a["date"]}
+              td $25.00
+              td #{a["hours"]}
+
+      section.right
+        table
+          tr.thead
+            td Total Hours: 
+            td 20.75 hours
 
