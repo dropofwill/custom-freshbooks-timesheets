@@ -31,10 +31,11 @@ html
         clear: both;
         width: 100%;
         padding-top: 1in;
+        padding-bottom: 0.25in;
       }
 
       .right {
-        float: left;
+        float: right;
         width: 50%;
         text-align: right;
       }
@@ -57,7 +58,7 @@ html
       }
 
       td {
-        padding: 0.25em;
+        padding: 0.5em;
       }
 
       .thead {
@@ -98,15 +99,14 @@ html
             td Time Sheet Pay Period:
             td 09/01/2014
           tr
-            td 
+            td
             td 09/14/2014
 
           tr.thead
-            td Total Hours: 
-            td 20.75 hours
+            td Total Hours:
+            td #{hours} hours
 
       section.full
-        /p #{entries}
         table
           tr.thead
             td Task
@@ -126,6 +126,5 @@ html
       section.right
         table
           tr.thead
-            td Total Hours: 
-            td 20.75 hours
-
+            td Total Hours:
+            td #{hours} hours

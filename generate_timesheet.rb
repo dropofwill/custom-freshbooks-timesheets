@@ -2,14 +2,25 @@ require 'slim'
 require 'tilt'
 require 'csv'
 require 'FreshBooks'
+require 'PDFKit'
 require 'set'
 require 'pp'
 
+@first_name = "will"
+@last_name = "paul"
+#@export_path = "/Users/#{@first_name}#{@last_name}/Documents/GlobalWork/#{@first_name}_#{@last_name}_"
+@export_path = "/Users/willpaul/Documents/GlobalWork/"
 
-def generate_timesheet data
+
+def generate_timesheet data, hours
   entries = data
+  time = { hours: hours }
 
-  output = Tilt.new('./timesheet.html.slim').render(entries)
+  output = Tilt.new('./timesheet.html.slim').render(entries, time)
+
+  path = "#{@export_path}#{@first_name}_#{@last_name}_#{Time.now.to_i}.pdf"
+  puts path
+  generate_pdf(output, path)
 
   File.open("./timesheet.html", "w") do |f|
     f.write(output)
@@ -18,10 +29,7 @@ end
 
 def get_hours data
   sum = []
-  data.each do |c|
-    sum << c["hours"].to_f
-  end
-  
+  data.each { |c| sum << c["hours"].to_f }
   return sum.inject(:+)
 end
 
@@ -59,6 +67,13 @@ def get_time_entries from, to
   return time_entries
 end
 
+def generate_pdf html, path
+  kit = PDFKit.new(html, page_size: 'Letter', margin_top: 0, margin_bottom: 0, margin_left: 0, margin_right: 0)
+  pdf = kit.to_pdf
+  kit.to_file(path)
+  pdf
+end
+
 cur_time_entries = get_time_entries "2014-09-01", "2014-09-14"
-p get_hours cur_time_entries
-#generate_timesheet cur_time_entries
+cur_hours = get_hours cur_time_entries
+generate_timesheet cur_time_entries, cur_hours
