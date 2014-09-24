@@ -6,11 +6,23 @@ require 'PDFKit'
 require 'set'
 require 'pp'
 
+# Set your defaults
 @first_name = "will"
 @last_name = "paul"
-#@export_path = "/Users/#{@first_name}#{@last_name}/Documents/GlobalWork/#{@first_name}_#{@last_name}_"
-@export_path = "/Users/willpaul/Documents/GlobalWork/"
+@to = "2014-09-01"
+@from = "2014-09-14"
+@export_path = "/Users/willpaul/Documents/GlobalWork/TimeSheets/"
 
+# accept command line arguments in the form @to @from
+@to = ARGV[0] unless ARGV[0].nil?
+@from = ARGV[1] unless ARGV[1].nil?
+
+
+def main
+  cur_time_entries = get_time_entries @to, @from
+  cur_hours = get_hours cur_time_entries
+  generate_timesheet cur_time_entries, cur_hours
+end
 
 def generate_timesheet data, hours
   entries = data
@@ -18,7 +30,7 @@ def generate_timesheet data, hours
 
   output = Tilt.new('./timesheet.html.slim').render(entries, time)
 
-  path = "#{@export_path}#{@first_name}_#{@last_name}_#{Time.now.to_i}.pdf"
+  path = "#{@export_path}#{@first_name}_#{@last_name}_#{@to}_#{@from}.pdf"
   puts path
   generate_pdf(output, path)
 
@@ -74,6 +86,5 @@ def generate_pdf html, path
   pdf
 end
 
-cur_time_entries = get_time_entries "2014-09-01", "2014-09-14"
-cur_hours = get_hours cur_time_entries
-generate_timesheet cur_time_entries, cur_hours
+# run the whole thing
+main()
