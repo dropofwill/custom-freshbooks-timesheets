@@ -46,7 +46,7 @@ def get_hours data
 end
 
 def get_time_entries from, to
-  freshbooks_client = FreshBooks::Client.new('dropofwill.freshbooks.com', '***REMOVED***')
+  freshbooks_client = FreshBooks::Client.new('dropofwill.freshbooks.com', ENV["FRESHBOOKS_API"])
   data = freshbooks_client.time_entry.list(date_from: from, date_to: to, per_page: 100)
 
   data = data["time_entries"]["time_entry"]
