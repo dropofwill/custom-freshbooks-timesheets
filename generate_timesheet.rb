@@ -17,7 +17,6 @@ require 'pp'
 @to = ARGV[0] unless ARGV[0].nil?
 @from = ARGV[1] unless ARGV[1].nil?
 
-
 def main
   cur_time_entries = get_time_entries @to, @from
   cur_hours = get_hours cur_time_entries
@@ -26,7 +25,7 @@ end
 
 def generate_timesheet data, hours
   entries = data
-  time = { hours: hours }
+  time = { hours: hours, to: @to, from: @from }
 
   output = Tilt.new('./timesheet.html.slim').render(entries, time)
 
@@ -48,6 +47,7 @@ end
 def get_time_entries from, to
   freshbooks_client = FreshBooks::Client.new('dropofwill.freshbooks.com', ENV["FRESHBOOKS_API"])
   data = freshbooks_client.time_entry.list(date_from: from, date_to: to, per_page: 100)
+  puts from, to
 
   data = data["time_entries"]["time_entry"]
 
